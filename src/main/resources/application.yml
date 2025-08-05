@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: gatewayserver
+# Configuracion de conexion al configserver
+  config:
+    import:
+    - "optional:configserver:http://localhost:8071/"
+# Activa el "Service Discovery Locator", 
+# una característica que permite enrutar dinámicamente las solicitudes
+# a servicios registrados en un servidor de descubrimiento como Eureka
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true    
+# Configuracion de actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+        - health
+        - info
+        - gateway
+## permite acceder al endpoint /actuator/gateway desde cualquier origen sin autenticación
+  endpoint:
+    gateway:
+      access: unrestricted      
+## Agrega automáticamente al endpoint /actuator/info todas las variables de entorno disponibles
+  info:
+    env:
+      enabled: true
+#Configuracion informacion mostrada en el endpoint de actuator /actuator/info
+info:
+  app:
+    name: "gatewayserver"
+    description: "EazyBank Gateway Server Application"
+    version: "1.0.0"
