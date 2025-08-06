@@ -37,3 +37,9 @@ info:
     name: "gatewayserver"
     description: "EazyBank Gateway Server Application"
     version: "1.0.0"
+#Estableciendo la configuracion de logging DEBUG en el paquete com.eazybank.gatewayserver del proyecto
+logging:
+  level:
+    com:
+      eazybank:
+        gatewayserver: DEBUG    
