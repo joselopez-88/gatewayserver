@@ -51,7 +51,7 @@ resilience4j:
   circuitbreaker:
     configs:
       default:
-        slidingWindowSize: 10 # Monitoreando requests de 10 en 10 para calcular el porcentaje de fallos.
+        slidingWindowSize: 10 # Monitoreando los ultimos 10 request para calcular el porcentaje de fallos.
         minimumNumberOfCalls: 5 # número mínimo de llamadas que deben existir en la ventana antes de calcular el ratio de fallos (de los mencionados en slidingWindowSize )  
         permittedNumberOfCallsInHalfOpenState: 2 # cuántas llamadas de prueba se permiten en HALF_OPEN state
         failureRateThreshold: 50 # umbral de porcentaje de fallos que dispara la apertura de circuito abierto
