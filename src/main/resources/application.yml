@@ -5,15 +5,20 @@ spring:
   config:
     import:
     - "optional:configserver:http://localhost:8071/"
+  cloud:
+    gateway:
 # Activa el "Service Discovery Locator", 
 # una característica que permite enrutar dinámicamente las solicitudes
 # a servicios registrados en un servidor de descubrimiento como Eureka
-  cloud:
-    gateway:
       discovery:
         locator:
           enabled: false
-          lowerCaseServiceId: true  
+          lowerCaseServiceId: true
+# Configurando el timeout para todos los request en feign
+# Se sobreescribe la configuracion por default que viene con circuitbreaker para los endpoints que lo utilizan
+      httpclient:
+        connectTimeout: 1000 # Define cuánto tiempo máximo el Gateway va a esperar para establecer la conexión TCP con el servicio de destino
+        responseTimeout: 5s # Define el tiempo máximo que el Gateway esperará por la respuesta completa del servicio de destino después de que la conexión se haya establecido y se haya enviado la petición.
 # Configuracion de actuator
 management:
   endpoints:
