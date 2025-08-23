@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 import org.springframework.cloud.circuitbreaker.resilience4j.ReactiveResilience4JCircuitBreakerFactory;
 import org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JConfigBuilder;
 import org.springframework.cloud.client.circuitbreaker.Customizer;
+import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
+import org.springframework.cloud.gateway.filter.ratelimit.RedisRateLimiter;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +16,7 @@ import org.springframework.http.HttpMethod;
 
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.timelimiter.TimeLimiterConfig;
+import reactor.core.publisher.Mono;
 
 @Configuration
 public class GatewayConfig {
@@ -55,6 +58,9 @@ public class GatewayConfig {
           .path("/eazybank/cards/**")
           .filters(f -> f.rewritePath("/eazybank/cards/(?<segment>.*)","/${segment}")
             .addResponseHeader("X-Response-Time", LocalDateTime.now().toString())
+            .requestRateLimiter(config -> config.setRateLimiter(redisRateLimiter())
+              .setKeyResolver(userKeyResolver())
+            )
           )
           .uri("lb://CARDS"))    
         .build();
@@ -67,5 +73,23 @@ public class GatewayConfig {
       .timeLimiterConfig(TimeLimiterConfig.custom().timeoutDuration(Duration.ofSeconds(4))
       .build())
       .build());
+    }
+
+    @Bean
+    public RedisRateLimiter redisRateLimiter() {
+      // Implementacion de RateLimiter con Redis
+      // replenishRate: Número de tokens que se agregan al bucket por segundo.
+      // burstCapacity: Número máximo de tokens que puede acumular el bucket.
+      // requestedTokens: Cuántos tokens cuesta una solicitud.
+      //RedisRateLimiter(replenishRate,burstCapacity,requestedTokens)
+        return new RedisRateLimiter(1,1,1);
+    }
+    // KeyResolver identifica a quién se aplica la cuota de peticiones.
+    @Bean
+    KeyResolver userKeyResolver () {
+      return exchange -> 
+        Mono.justOrEmpty(exchange.getRequest().getHeaders().getFirst("user")).defaultIfEmpty("annonymous");
+        // Toma el request y busca el header user
+        // Si no lo encuentra, devuelve annonymous
     }
 }
