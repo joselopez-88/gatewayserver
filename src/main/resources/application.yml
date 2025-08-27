@@ -35,9 +35,10 @@ management:
         - health
         - info
         - gateway
-        - metrics
         - circuitbreakers
         - circuitbreakerevents
+        - metrics
+        - prometheus
 ## permite acceder al endpoint /actuator/gateway desde cualquier origen sin autenticación
   endpoint:
     gateway:
@@ -46,6 +47,10 @@ management:
   info:
     env:
       enabled: true
+## Agregar una etiqueta (tag) personalizada a todas las métricas que genera Actuator en micrometer llamado application como valor el nombre del microservicio
+  metrics:
+    tags:
+      application: ${spring.application.name}
 #Configuracion informacion mostrada en el endpoint de actuator /actuator/info
 info:
   app:
