@@ -10,22 +10,24 @@ spring:
 # Activa el "Service Discovery Locator", 
 # una característica que permite enrutar dinámicamente las solicitudes
 # a servicios registrados en un servidor de descubrimiento como Eureka
-      discovery:
-        locator:
-          enabled: false
-          lowerCaseServiceId: true
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: false
+              lowerCaseServiceId: true
 # Configurando el timeout para todos los request en feign
 # Se sobreescribe la configuracion por default que viene con circuitbreaker para los endpoints que lo utilizan
-      httpclient:
-        connectTimeout: 1000 # Define cuánto tiempo máximo el Gateway va a esperar para establecer la conexión TCP con el servicio de destino
-        responseTimeout: 15s # Define el tiempo máximo que el Gateway esperará por la respuesta completa del servicio de destino después de que la conexión se haya establecido y se haya enviado la petición.
+          httpclient:
+            connectTimeout: 1000 # Define cuánto tiempo máximo el Gateway va a esperar para establecer la conexión TCP con el servicio de destino
+            responseTimeout: 15s # Define el tiempo máximo que el Gateway esperará por la respuesta completa del servicio de destino después de que la conexión se haya establecido y se haya enviado la petición.
 #Configurando conexion con redis
-  data:
-    redis:
-      connect-timeout: 2s
-      host: localhost
-      port: 6379
-      timeout: 1s
+  # data:
+  #   redis:
+  #     connect-timeout: 2s
+  #     host: localhost
+  #     port: 6379
+  #     timeout: 1s
 # Configuracion de actuator
 management:
   endpoints:
