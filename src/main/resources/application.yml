@@ -65,6 +65,10 @@ logging:
     com:
       eazybites:
         gatewayserver: DEBUG
+# Estableciendo un patron de log personalizado para el microservicio
+  pattern:
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"            
+
 #Configuracion de resilience4j
 resilience4j:
   circuitbreaker:
