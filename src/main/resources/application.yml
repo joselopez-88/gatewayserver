@@ -28,6 +28,15 @@ spring:
   #     host: localhost
   #     port: 6379
   #     timeout: 1s
+# Configuración de Spring Security para un Resource Server que valida JWT emitidos por Keycloak u otro Authorization Server compatible con OpenID Connect  
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+# JWK = JSON Web Key, un conjunto de claves públicas que permiten al Resource Server 
+## - Verificar la firma de los JWT
+## - Asegurarse de que no han sido modificados
+          jwk-set-uri: "http://localhost:7080/realms/master/protocol/openid-connect/certs"
 # Configuracion de actuator
 management:
   endpoints:
